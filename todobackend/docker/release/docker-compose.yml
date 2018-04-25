@@ -6,7 +6,7 @@ app:
   volumes_from:
     - webroot
   environment:
-    DJANGO_SETTING_MODULE: todobackend.settings.release
+    DJANGO_SETTINGS_MODULE: todobackend.settings.release
     MYSQL_HOST: db
     MYSQL_USER: todo
     MYSQL_PASSWORD: password
@@ -48,6 +48,8 @@ nginx:
     - ./todobackend.conf:/etc/nginx/conf.d/todobackend.conf
   ports:
     - "8000:8000"
+  volumes_from:
+    - webroot
 
 webroot:
   build: ../../
@@ -55,3 +57,14 @@ webroot:
   volumes:
     - /var/www/todobackend
   entrypoint: "true" 
+
+
+test: 
+  image: zhangmingkai4315/todobackend-spec
+  links:
+    - nginx
+  environment:
+    URL: http://nginx:8000/todos
+    JUNIT_REPORT_PATH: /reports/acceptance.xml
+    JUNIT_REPORT_STACK: 1
+  command: --reporter mocha-jenkins-reporter
