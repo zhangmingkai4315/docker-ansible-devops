@@ -31,21 +31,19 @@ db:
     MYSQL_ROOT_PASSWORD: password
 
 agent:
-  image: zhangmingkai4315/ansible
-  volumes:
-    - ../../ansible/probe.yml:/ansible/site.yml
+  image: zhangmingkai4315/todo-ansible
   links:
     - db
   environment:
     PROBE_HOST: "db"
     PROBE_PORT: "3306"
+  command: ['probe.yml']
 
 nginx:
-  image: nginx
+  build: .
+  dockerfile: Dockerfile.nginx
   links:
     - app
-  volumes:
-    - ./todobackend.conf:/etc/nginx/conf.d/todobackend.conf
   ports:
     - "8000:8000"
   volumes_from:

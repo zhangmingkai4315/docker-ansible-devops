@@ -13,7 +13,7 @@ RUN apt-get update -qy && \
 
 VOLUME [ "/ansible" ]
 WORKDIR /ansible
+COPY ./ansible/probe.yml /ansible/probe.yml
 
 ENTRYPOINT [ "ansible-playbook" ]
-
 CMD [ "site.yml" ]

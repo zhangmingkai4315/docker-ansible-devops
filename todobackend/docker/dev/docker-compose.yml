@@ -10,13 +10,11 @@ test:
     MYSQL_HOST: db
     MYSQL_USER: root
     MYSQL_PASSWORD: password
-    TEST_OUTPUT_DIR: /reports 
+    TEST_OUTPUT_DIR: /reports
 
 builder:
   build: ../../
   dockerfile: docker/dev/Dockerfile
-  volumes:
-    - ../../target:/wheelhouse
   volumes_from:
     - cache
   entrypoint: "entrypoint.sh"
@@ -32,14 +30,13 @@ cache:
   entrypoint: "true"
 
 agent:
-  image: zhangmingkai4315/ansible
-  volumes:
-    - ../../ansible/probe.yml:/ansible/site.yml
+  image: zhangmingkai4315/todo-ansible
   links:
     - db
   environment:
     PROBE_HOST: "db"
     PROBE_PORT: "3306"
+  command: ['probe.yml']
 
 db: 
   image: mysql:5.6
